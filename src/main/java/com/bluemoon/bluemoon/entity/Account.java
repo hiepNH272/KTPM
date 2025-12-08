@@ -21,6 +21,9 @@ public class Account {
 	private LocalDateTime createdAt = LocalDateTime.now();
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
+    @OneToOne
+    @JoinColumn(name = "resident_id")
+    private Resident resident;
 	public Long getId() {
 		return id;
 	}
@@ -57,5 +60,12 @@ public class Account {
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+	public Resident getResident() {
+		return resident;
+	}
+	public void setResident(Resident resident) {
+		this.resident = resident;
+	}
+	
     
 }

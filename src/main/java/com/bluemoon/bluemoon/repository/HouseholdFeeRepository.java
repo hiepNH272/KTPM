@@ -16,4 +16,5 @@ public interface HouseholdFeeRepository extends JpaRepository<HouseholdFee, Long
     List<HouseholdFee> findByHouseholdAndBillingPeriod(Household household, BillingPeriod period);
 
     List<HouseholdFee> findByStatus(String status);
+    List<HouseholdFee> findByHouseholdId(Long householdId);
 }

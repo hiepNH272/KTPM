@@ -2,6 +2,9 @@ package com.bluemoon.bluemoon.controller;
 import com.bluemoon.bluemoon.entity.Account;
 import com.bluemoon.bluemoon.repository.AccountRepository;
 
+import jakarta.servlet.http.HttpSession;
+
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +21,8 @@ public class AuthController {
 	
 	@PostMapping("/resident-login")
 	public String loginResident(@RequestParam String username,
-			                    @RequestParam String password) {
+			                    @RequestParam String password,
+			                    HttpSession session) {
 		Optional<Account> opt = accountRepository.findByUsername(username);
 		
 		if(opt.isEmpty()) {
@@ -32,12 +36,15 @@ public class AuthController {
 		if(!passwordOk || !roleOk) {
 			return "redirect:/login-user.html";
 		}
+		
+		session.setAttribute("residentId",acc.getResident().getId());
 		return "redirect:/dashboard-user.html";
 	}
 	
 	@PostMapping("/admin-login")
 	public String loginAdmin(@RequestParam String username,
-			               @RequestParam String password) {
+			               @RequestParam String password,
+			               HttpSession session) {
 		Optional<Account> opt =accountRepository.findByUsername(username);
 		
 		if(opt.isEmpty()) {
@@ -52,6 +59,8 @@ public class AuthController {
 		if(!passwordOk || !roleOk) {
 			return "redirect:/login-admin.html";
 		}
+		
+		session.setAttribute("admin",acc.getId());
 		return "redirect:/dashboard-admin.html";
 			
 }

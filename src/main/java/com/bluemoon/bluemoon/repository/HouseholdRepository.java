@@ -1,6 +1,8 @@
 package com.bluemoon.bluemoon.repository;
 
 import com.bluemoon.bluemoon.entity.Household;
+import com.bluemoon.bluemoon.entity.HouseholdFee;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -13,4 +15,6 @@ public interface HouseholdRepository extends JpaRepository<Household, Long> {
     List<Household> findByApartmentNumber(String apartmentNumber);
 
     List<Household> findByActiveTrue();
+    
+   
 }
