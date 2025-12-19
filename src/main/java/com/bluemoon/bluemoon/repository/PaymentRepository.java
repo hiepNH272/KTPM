@@ -10,4 +10,5 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     List<Payment> findByHouseholdFee(HouseholdFee householdFee);
     List<Payment> findByHouseholdFee_Household_Id(Long householdId);
+    boolean existsByHouseholdFeeId(Long householdFeeId);
 }

@@ -1,6 +1,7 @@
 package com.bluemoon.bluemoon.service.impl;
 
 import com.bluemoon.bluemoon.entity.BillingPeriod;
+import com.bluemoon.bluemoon.exception.ResourceNotFoundException;
 import com.bluemoon.bluemoon.repository.BillingPeriodRepository;
 import com.bluemoon.bluemoon.service.BillingPeriodService;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class BillingPeriodServiceImpl implements BillingPeriodService {
     @Override
     public BillingPeriod update(Long id, BillingPeriod period) {
         BillingPeriod existing = billingPeriodRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("BillingPeriod not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("BillingPeriod not found with id " + id));
 
         existing.setYear(period.getYear());
         existing.setMonth(period.getMonth());
@@ -39,6 +40,9 @@ public class BillingPeriodServiceImpl implements BillingPeriodService {
 
     @Override
     public void delete(Long id) {
+    	if(!billingPeriodRepository.existsById(id)) {
+    		throw new ResourceNotFoundException("BillingPeriod not found with id " + id);
+    	}
         billingPeriodRepository.deleteById(id);
     }
 
@@ -46,7 +50,7 @@ public class BillingPeriodServiceImpl implements BillingPeriodService {
     @Transactional(readOnly = true)
     public BillingPeriod getById(Long id) {
         return billingPeriodRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("BillingPeriod not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("BillingPeriod not found with id " + id));
     }
 
     @Override
@@ -59,6 +63,6 @@ public class BillingPeriodServiceImpl implements BillingPeriodService {
     @Transactional(readOnly = true)
     public BillingPeriod getByYearMonth(Integer year, Integer month) {
         return billingPeriodRepository.findByYearAndMonth(year, month)
-                .orElseThrow(() -> new RuntimeException("BillingPeriod not found for " + year + "-" + month));
+                .orElseThrow(() -> new ResourceNotFoundException("BillingPeriod not found for " + year + "-" + month));
     }
 }

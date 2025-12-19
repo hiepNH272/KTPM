@@ -1,6 +1,7 @@
 package com.bluemoon.bluemoon.service.impl;
 
 import com.bluemoon.bluemoon.entity.HouseholdFee;
+import com.bluemoon.bluemoon.exception.ResourceNotFoundException;
 import com.bluemoon.bluemoon.repository.HouseholdFeeRepository;
 import com.bluemoon.bluemoon.service.HouseholdFeeService;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class HouseholdFeeServiceImpl implements HouseholdFeeService {
     @Override
     public HouseholdFee update(Long id, HouseholdFee fee) {
         HouseholdFee existing = householdFeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("HouseholdFee not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("HouseholdFee not found with id " + id));
 
         existing.setHousehold(fee.getHousehold());
         existing.setFeeCategory(fee.getFeeCategory());
@@ -42,6 +43,9 @@ public class HouseholdFeeServiceImpl implements HouseholdFeeService {
 
     @Override
     public void delete(Long id) {
+    	if(!householdFeeRepository.existsById(id)) {
+    		throw new ResourceNotFoundException("HouseholdFee not found with id " + id);
+    	}
         householdFeeRepository.deleteById(id);
     }
 
@@ -49,7 +53,7 @@ public class HouseholdFeeServiceImpl implements HouseholdFeeService {
     @Transactional(readOnly = true)
     public HouseholdFee getById(Long id) {
         return householdFeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("HouseholdFee not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("HouseholdFee not found with id " + id));
     }
 
     @Override

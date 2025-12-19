@@ -1,6 +1,7 @@
 package com.bluemoon.bluemoon.service.impl;
 
 import com.bluemoon.bluemoon.entity.FeeCategory;
+import com.bluemoon.bluemoon.exception.ResourceNotFoundException;
 import com.bluemoon.bluemoon.repository.FeeCategoryRepository;
 import com.bluemoon.bluemoon.service.FeeCategoryService;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class FeeCategoryServiceImpl implements FeeCategoryService {
     @Override
     public FeeCategory update(Long id, FeeCategory feeCategory) {
         FeeCategory existing = feeCategoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("FeeCategory not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("FeeCategory not found with id " + id));
 
         existing.setCode(feeCategory.getCode());
         existing.setName(feeCategory.getName());
@@ -41,6 +42,9 @@ public class FeeCategoryServiceImpl implements FeeCategoryService {
 
     @Override
     public void delete(Long id) {
+    	if(!feeCategoryRepository.existsById(id)) {
+    		throw new ResourceNotFoundException("FeeCategory not found with id " + id);
+    	}
         feeCategoryRepository.deleteById(id);
     }
 
@@ -48,7 +52,7 @@ public class FeeCategoryServiceImpl implements FeeCategoryService {
     @Transactional(readOnly = true)
     public FeeCategory getById(Long id) {
         return feeCategoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("FeeCategory not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("FeeCategory not found with id " + id));
     }
 
     @Override

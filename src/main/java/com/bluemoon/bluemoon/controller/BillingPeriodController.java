@@ -25,7 +25,7 @@ public class BillingPeriodController {
     @PutMapping("/{id}")
     public ResponseEntity<BillingPeriod> update(@PathVariable Long id,
                                                 @RequestBody BillingPeriod period) {
-        return ResponseEntity.ok(billingPeriodService.update(id, period));
+        return ResponseEntity.ok(billingPeriodService.update(id, period));	
     }
 
     @DeleteMapping("/{id}")

@@ -1,6 +1,7 @@
 package com.bluemoon.bluemoon.service.impl;
 
 import com.bluemoon.bluemoon.entity.Household;
+import com.bluemoon.bluemoon.exception.ResourceNotFoundException;
 import com.bluemoon.bluemoon.repository.HouseholdRepository;
 import com.bluemoon.bluemoon.service.HouseholdService;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class HouseholdServiceImpl implements HouseholdService {
     @Override
     public Household update(Long id, Household household) {
         Household existing = householdRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Household not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Household not found with id " + id));
 
         existing.setHouseholdCode(household.getHouseholdCode());
         existing.setOwnerName(household.getOwnerName());
@@ -43,6 +44,9 @@ public class HouseholdServiceImpl implements HouseholdService {
 
     @Override
     public void delete(Long id) {
+    	if(!householdRepository.existsById(id)) {
+    		throw new ResourceNotFoundException("Household not found with id " + id);
+    	}
         householdRepository.deleteById(id);
     }
 
@@ -50,7 +54,7 @@ public class HouseholdServiceImpl implements HouseholdService {
     @Transactional(readOnly = true)
     public Household getById(Long id) {
         return householdRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Household not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Household not found with id " + id));
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.bluemoon.bluemoon.service.impl;
 
 import com.bluemoon.bluemoon.entity.Household;
 import com.bluemoon.bluemoon.entity.Resident;
+import com.bluemoon.bluemoon.exception.ResourceNotFoundException;
 import com.bluemoon.bluemoon.repository.HouseholdRepository;
 import com.bluemoon.bluemoon.repository.ResidentRepository;
 import com.bluemoon.bluemoon.service.ResidentService;
@@ -31,7 +32,7 @@ public class ResidentServiceImpl implements ResidentService {
     @Override
     public Resident update(Long id, Resident resident) {
         Resident existing = residentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Resident not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Resident not found with id " + id));
 
         existing.setFullName(resident.getFullName());
         existing.setDateOfBirth(resident.getDateOfBirth());
@@ -47,6 +48,9 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Override
     public void delete(Long id) {
+    	if(!residentRepository.existsById(id)) {
+    		throw new ResourceNotFoundException("Resident not found with id " + id);
+    	}
         residentRepository.deleteById(id);
     }
 
@@ -54,7 +58,7 @@ public class ResidentServiceImpl implements ResidentService {
     @Transactional(readOnly = true)
     public Resident getById(Long id) {
         return residentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Resident not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Resident not found with id " + id));
     }
 
     @Override
@@ -67,7 +71,7 @@ public class ResidentServiceImpl implements ResidentService {
     @Transactional(readOnly = true)
     public List<Resident> getByHousehold(Long householdId) {
         Household household = householdRepository.findById(householdId)
-                .orElseThrow(() -> new RuntimeException("Household not found with id " + householdId));
+                .orElseThrow(() -> new ResourceNotFoundException("Household not found with id " + householdId));
         return residentRepository.findByHousehold(household);
     }
 
